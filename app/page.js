@@ -1,6 +1,6 @@
 
 import Link from 'next/link'; 
-import Page from "./week-2/page"
+
 
 export default function Home() {
   return (
@@ -9,6 +9,10 @@ export default function Home() {
       <li><Link href="/week-2">week 2</Link> </li>
       <li><Link href="/week-3">week 3</Link> </li>  
       <li><Link href="/week-4">week 4</Link> </li>
+      <li><Link href="/week-6">week 6</Link> </li>
+      <li><Link href="/week-5">week 5</Link> </li>
+
+      
     </div>
   );
 }
