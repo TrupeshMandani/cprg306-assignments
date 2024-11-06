@@ -1,98 +1,115 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function NewItem({ onAddItem }) {
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [category, setCategory] = useState("produce");
+const NewItem = ({ onAddItem }) => {
+  // State Variables
+  const [name, setName] = useState(""); // Initial value is an empty string
+  const [quantity, setQuantity] = useState(0); // Initial quantity is 0
+  const [category, setCategory] = useState("Produce"); // Default to "Produce"
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Form submission handler
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+
     const item = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).substring(2, 9), // Generate a random ID
       name,
       quantity,
       category,
-    };
-    onAddItem(item);
+    }; // Create item object
+
+    onAddItem(item); // Call the onAddItem prop with the new item
+
+    // Reset state variables to initial values
     setName("");
-    setQuantity(1);
-    setCategory("produce");
+    setQuantity(0); // Reset quantity to 0
+    setCategory("Produce"); // Reset category to "Produce"
   };
 
-  const increment = () => setQuantity((prev) => Math.min(prev + 1, 20));
-  const decrement = () => setQuantity((prev) => Math.max(prev - 1, 1));
+  // Increment function
+  const increment = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1); // Increase quantity by 1
+  };
+
+  // Decrement function
+  const decrement = () => {
+    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 0)); // Decrease quantity by 1, ensuring it doesn't go below 0
+  };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-blue-950 rounded-lg p-6 shadow-md space-y-4 w-[500px]"
+      className="p-4 bg-slate-700 rounded shadow-md max-w-md mx-auto"
     >
-      <div>
+      {/* Name Field */}
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium" htmlFor="name">
+          Name
+        </label>
         <input
           type="text"
-          placeholder="Item name"
+          id="name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="border border-gray-300 rounded-lg px-4 py-2 w-full bg-gray-100 text-gray-900"
+          onChange={(e) => setName(e.target.value)} // Update state on change
+          required // Prevent submission without a name
+          className="w-full p-2 border bg-slate-500 border-gray-300 rounded"
         />
       </div>
 
-      <div className="flex items-center space-x-4">
-        <button
-          type="button"
-          onClick={decrement}
-          disabled={quantity === 1}
-          className={`px-4 py-2 rounded-full ${
-            quantity === 1
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-gray-300 text-gray-900"
-          }`}
-        >
-          −
-        </button>
-        <span className="text-lg font-bold text-white">{quantity}</span>
-        <button
-          type="button"
-          onClick={increment}
-          disabled={quantity === 20}
-          className={`px-4 py-2 rounded-full ${
-            quantity === 20
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-500 text-white"
-          }`}
-        >
-          +
-        </button>
+      <div className="flex items-center justify-between mb-4">
+        {/* Quantity Field with Increment/Decrement Buttons */}
+        <div className="bg-white text-black w-48 p-2 rounded shadow">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={decrement}
+              className="bg-red-500 disabled:bg-red-300 text-white px-4 py-2 rounded-md hover:bg-red-700"
+            >
+              -
+            </button>
+            <span className="my-auto w-12 text-center">{quantity}</span>
+            <button
+              type="button"
+              onClick={increment}
+              className="bg-green-500 disabled:bg-green-300 text-white px-4 py-2 rounded-md hover:bg-green-700"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {/* Category Field */}
+        <div className="mb-4 flex items-center">
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)} // Update category on change
+            className="h-11 p-2 border bg-slate-500 border-gray-300 rounded"
+          >
+            <option value="Produce">Produce</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Bakery">Bakery</option>
+            <option value="Meat">Meat</option>
+            <option value="Frozen Foods">Frozen Foods</option>
+            <option value="Canned Goods">Canned Goods</option>
+            <option value="Dry Goods">Dry Goods</option>
+            <option value="Beverages">Beverages</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Household">Household</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
 
-      <div>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 w-full bg-gray-100 text-gray-900"
-        >
-          <option value="produce">Produce</option>
-          <option value="dairy">Dairy</option>
-          <option value="bakery">Bakery</option>
-          <option value="meat">Meat</option>
-          <option value="frozen foods">Frozen Foods</option>
-          <option value="canned goods">Canned Goods</option>
-          <option value="dry goods">Dry Goods</option>
-          <option value="beverages">Beverages</option>
-          <option value="snacks">Snacks</option>
-          <option value="household">Household</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
+      {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-2 bg-blue-500 text-white rounded-lg"
+        className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600 my-4"
       >
-        Add Item
+        Submit
       </button>
     </form>
   );
-}
+};
+
+export default NewItem;

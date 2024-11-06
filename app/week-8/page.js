@@ -23,14 +23,14 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white p-8">
+    <main className="min-h-screen bg-slate-900 text-white p-8">
       <h1 className="text-4xl font-bold mb-6">Shopping List</h1>
       <div className="flex gap-8">
-        <div className="w-1/2 bg-gray-800 p-6 rounded-lg">
+        <div className="w-1/2 bg-slate-800 p-6 rounded-lg">
           <NewItem onAddItem={handleAddItem} />
           <ItemList items={items} onItemSelect={handleItemSelect} />
         </div>
-        <div className="w-1/2 bg-gray-800 p-6 rounded-lg">
+        <div className="w-1/2 bg-slate-800 p-6 rounded-lg">
           <MealIdeas ingredient={selectedItemName} />
         </div>
       </div>
