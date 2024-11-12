@@ -1,3 +1,4 @@
+// auth-hooks.js
 "use client";
 
 import { useContext, createContext, useState, useEffect } from "react";
@@ -16,11 +17,24 @@ export const AuthContextProvider = ({ children }) => {
 
   const gitHubSignIn = () => {
     const provider = new GithubAuthProvider();
-    return signInWithPopup(auth, provider);
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        setUser(result.user);
+        return result;
+      })
+      .catch((error) => {
+        console.error("GitHub sign-in error:", error);
+        throw error; // rethrow for handling in components
+      });
   };
 
   const firebaseSignOut = () => {
-    return signOut(auth);
+    return signOut(auth)
+      .then(() => setUser(null))
+      .catch((error) => {
+        console.error("Sign-out error:", error);
+        throw error;
+      });
   };
 
   useEffect(() => {
@@ -28,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
       setUser(currentUser);
     });
     return () => unsubscribe();
-  }, [user]);
+  }, []); // Removed user dependency to avoid reruns
 
   return (
     <AuthContext.Provider value={{ user, gitHubSignIn, firebaseSignOut }}>

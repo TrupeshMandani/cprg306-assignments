@@ -1,38 +1,55 @@
-import { useUserAuth } from "./_utils/auth-context";
-import Link from "next/link";
+// week-9/shopping-list/page.js
+"use client";
+import { useState, useEffect } from "react";
+import { useUserAuth } from "../_utils/auth-hooks";
+import { useRouter } from "next/navigation";
+import ItemList from "./item-list";
+import NewItem from "./new-item";
+import itemsData from "./items.json";
+import MealIdeas from "./meal-ideas";
 
 export default function Page() {
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user } = useUserAuth();
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    try {
-      await gitHubSignIn();
-    } catch (error) {
-      console.error("Error logging in: ", error);
+  const [items, setItems] = useState(itemsData);
+  const [selectedItemName, setSelectedItemName] = useState("");
+
+  // Redirect to landing page if user is not logged in
+  useEffect(() => {
+    if (!user) {
+      router.push("/week-9"); // Redirect to the landing page
     }
+  }, [user, router]);
+
+  // If user is not logged in, don't render the component
+  if (!user) return null;
+
+  const handleAddItem = (item) => {
+    setItems((prevItems) => [...prevItems, item]);
   };
 
-  const handleLogout = async () => {
-    try {
-      await firebaseSignOut();
-    } catch (error) {
-      console.error("Error logging out: ", error);
-    }
+  const handleItemSelect = (name) => {
+    const cleanedName = name
+      .split(",")[0]
+      .replace(/[\u{1F600}-\u{1F6FF}]/gu, "")
+      .trim();
+    console.log("Selected item name:", cleanedName);
+    setSelectedItemName(cleanedName);
   };
 
   return (
-    <div>
-      {user ? (
-        <div>
-          <p>
-            Welcome, {user.displayName} ({user.email})
-          </p>
-          <button onClick={handleLogout}>Logout</button>
-          <Link href="/week-9/shopping-list">Go to Shopping List</Link>
+    <main className="min-h-screen bg-slate-900 text-white p-8">
+      <h1 className="text-4xl font-bold mb-6">Shopping List</h1>
+      <div className="flex gap-8">
+        <div className="w-1/2 bg-slate-800 p-6 rounded-lg">
+          <NewItem onAddItem={handleAddItem} />
+          <ItemList items={items} onItemSelect={handleItemSelect} />
         </div>
-      ) : (
-        <button onClick={handleLogin}>Login with GitHub</button>
-      )}
-    </div>
+        <div className="w-1/2 bg-slate-800 p-6 rounded-lg">
+          <MealIdeas ingredient={selectedItemName} />
+        </div>
+      </div>
+    </main>
   );
 }
