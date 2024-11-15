@@ -13,7 +13,7 @@ export default function ItemList() {
     quantity: 1,
     category: "dairy",
   };
-
+  //THISIS
   const item2 = {
     name: "bread 🍞",
     quantity: 2,
