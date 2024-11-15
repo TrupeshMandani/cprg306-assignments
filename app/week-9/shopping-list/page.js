@@ -1,3 +1,10 @@
+/**
+ * The `Page` function is a React component that manages a shopping list application, allowing users to
+ * add items, select items, and view meal ideas based on selected ingredients.
+ * @returns The `Page` component is being returned, which contains the main structure of the shopping
+ * list page. It includes a heading "Shopping List", a section for adding new items and displaying the
+ * item list, and a section for displaying meal ideas based on the selected item.
+ */
 // week-9/shopping-list/page.js
 "use client";
 import { useState, useEffect } from "react";
