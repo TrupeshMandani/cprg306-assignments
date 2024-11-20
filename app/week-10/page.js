@@ -1,44 +1,55 @@
-// week-9/page.js
 "use client";
-import { useUserAuth } from "./_utils/auth-hooks";
-import Link from "next/link";
 
-export default function Home() {
+import { useEffect } from "react";
+import { useUserAuth } from "./_utils/auth-hooks";
+import { useRouter } from "next/navigation";
+
+export default function Page() {
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const router = useRouter();
+
+  const login = async () => {
+    await gitHubSignIn();
+  };
+
+  const logout = async () => {
+    await firebaseSignOut();
+  };
+
+  const goToShoppingList = () => {
+    router.push("/week-10/shopping-list"); // Redirect to shopping list page
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 p-6">
-      <h1 className="text-3xl font-semibold mb-8">
-        CPRG 306: Web Development 2 - Assignments
-      </h1>
-      {user ? (
-        <div className="text-center">
-          <p className="mb-4">
-            Welcome,{" "}
-            <span className="font-bold">{user.displayName || "User"}</span>!
-          </p>
+    <main className="min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-6">Week 10</h1>
+      <div className="text-center">
+        {user ? (
+          <div>
+            <p>Welcome, {user.displayName}!</p>
+            <p>I know your email address. It is {user.email}.</p>
+            <button
+              onClick={logout}
+              className="bg-red-500 text-white py-2 px-4 rounded mt-4"
+            >
+              Logout
+            </button>
+            <button
+              onClick={goToShoppingList}
+              className="bg-blue-500 text-white py-2 px-4 rounded mt-4 ml-4"
+            >
+              Go to Shopping List
+            </button>
+          </div>
+        ) : (
           <button
-            onClick={firebaseSignOut}
-            className="bg-red-500 text-white px-4 py-2 rounded mb-4 hover:bg-red-600 transition"
+            onClick={login}
+            className="bg-green-500 text-white py-2 px-4 rounded"
           >
-            Logout
+            Login with GitHub
           </button>
-          <br />
-          <Link
-            href="/week-9/shopping-list"
-            className="text-blue-500 underline hover:text-blue-600"
-          >
-            Go to Shopping List
-          </Link>
-        </div>
-      ) : (
-        <button
-          onClick={gitHubSignIn}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          Login with GitHub
-        </button>
-      )}
-    </div>
+        )}
+      </div>
+    </main>
   );
 }

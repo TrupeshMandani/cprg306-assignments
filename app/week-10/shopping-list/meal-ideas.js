@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function MealIdeas({ ingredient }) {
   const [meals, setMeals] = useState([]);
@@ -46,9 +47,11 @@ export default function MealIdeas({ ingredient }) {
           <ul>
             {meals.map((meal) => (
               <li key={meal.idMeal} className="mb-4">
-                <img
+                <Image
                   src={meal.strMealThumb}
                   alt={meal.strMeal}
+                  width={64} // 16 * 4 (since 16px is the width in Tailwind)
+                  height={64} // 16 * 4 (same for height)
                   className="w-16 h-16 rounded-full mb-2"
                 />
                 <p>{meal.strMeal}</p>
